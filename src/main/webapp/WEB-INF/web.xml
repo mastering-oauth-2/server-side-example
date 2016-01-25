@@ -4,4 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+    <servlet-name>OAuthCallbackListener</servlet-name>
+    <servlet-class>com.wmiig.servlet.OAuthCallbackListener</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OAuthCallbackListener</servlet-name>
+    <url-pattern>/callback</url-pattern>
+  </servlet-mapping>
 </web-app>
