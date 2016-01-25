@@ -68,7 +68,22 @@ public class OAuthCallbackListener extends HttpServlet {
       CloseableHttpClient httpClient = HttpClients.createDefault();
       HttpResponse httpResponse = httpClient.execute(httpPost);
 
-      // TODO: Handle access token response
+      // Handle access token response
+      Reader reader = new InputStreamReader(httpResponse.getEntity().getContent());
+      BufferedReader bufferedReader = new BufferedReader(reader);
+      String line = bufferedReader.readLine();
+
+      // Isolate access token
+      String accessToken = null;
+      String[] responseProperties = line.split("&");
+      for (String responseProperty : responseProperties) {
+        if (responseProperty.startsWith("access_token=")) {
+          accessToken = responseProperty.split("=")[1];
+          break;
+        }
+      }
+
+      // TODO: Request profile and feed data with access token
 
       httpClient.close();
     } else {
