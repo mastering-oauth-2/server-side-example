@@ -24,6 +24,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,9 +34,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 
 public class OAuthCallbackListener extends HttpServlet {
   private static final long serialVersionUID = 1L;
@@ -83,7 +88,20 @@ public class OAuthCallbackListener extends HttpServlet {
         }
       }
 
-      // TODO: Request profile and feed data with access token
+      // Request feed data with access token
+      String requestUrl = "https://graph.facebook.com/v2.5/me/feed?limit=25";
+      httpClient = HttpClients.createDefault();
+      httpPost = new HttpPost(requestUrl);
+      httpPost.addHeader("Authorization", "Bearer " + accessToken);
+      List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+      urlParameters.add(new BasicNameValuePair("method", "get"));
+      httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
+      httpResponse = httpClient.execute(httpPost);
+
+      // Extract feed data from response
+      bufferedReader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
+      String feedJson = bufferedReader.readLine();
+      System.out.println("Feed data: " + feedJson);
 
       httpClient.close();
     } else {
