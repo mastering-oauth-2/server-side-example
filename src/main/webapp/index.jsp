@@ -12,8 +12,22 @@
       });
 
       function makeRequest() {
-        // TODO: Make authorization request
-        alert("Button clicked!");
+        // Define properties
+        var AUTH_ENDPOINT = "https://www.facebook.com/dialog/oauth";
+        var RESPONSE_TYPE = "code";
+        var CLIENT_ID = "INSERT_CLIENT_ID";
+        var REDIRECT_URI = "http://wmiig.com/callback";
+        var SCOPE = "public_profile user_posts";
+
+        // Build authorization request endpoint
+        var requestEndpoint = AUTH_ENDPOINT + "?" +
+        "response_type=" + encodeURIComponent(RESPONSE_TYPE) + "&" +
+        "client_id=" + encodeURIComponent(CLIENT_ID) + "&" +
+        "redirect_uri=" + encodeURIComponent(REDIRECT_URI) + "&" +
+        "scope=" + encodeURIComponent(SCOPE);
+
+        // Send to authorization request endpoint
+        window.location.href = requestEndpoint;
       }
     </script>
   </head>
